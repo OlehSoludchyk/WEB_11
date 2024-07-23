@@ -23,13 +23,13 @@ class ContactUpdateSchema(ContactSchema):
     details: Optional[str] = Field(None, max_length=150)
 
 
-class ContactResponse(BaseModel):
-    firstname: str 
-    surname: str 
-    email: EmailStr 
-    phone: str 
-    birthday: date 
-    details: str
+class ContactCreate(ContactSchema):
+    pass
+
+
+class ContactResponse(ContactSchema):
+    id: int
+    
 
     class Config:
-        orm_mode = True
+        from_attributes = True

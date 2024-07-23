@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy import text
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.db import get_db
 from src.routes import contacts
@@ -15,10 +15,10 @@ def index():
 
 
 @app.get('/api/healthcheker')
-def healthcheker(db: Session = Depends(get_db)):
+async def healthcheker(db: AsyncSession = Depends(get_db)):
     try:
         #Make request
-        result = db.execute(text('SELECT 1'))
+        result = await db.execute(text('SELECT 1'))
         result = result.fetchone()
         if result is None:
             raise HTTPException(status_code=500, detail='Database isn\'t confifured correctly')

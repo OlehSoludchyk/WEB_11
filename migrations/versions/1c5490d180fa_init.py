@@ -1,8 +1,8 @@
 """'Init'
 
-Revision ID: 6d4033f1ae32
+Revision ID: 1c5490d180fa
 Revises: 
-Create Date: 2024-07-10 16:22:09.760002
+Create Date: 2024-07-23 10:53:12.971839
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '6d4033f1ae32'
+revision: str = '1c5490d180fa'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,13 +24,12 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('firstname', sa.String(length=25), nullable=False),
     sa.Column('surname', sa.String(length=25), nullable=False),
-    sa.Column('email', sa.String(length=40), nullable=False),
-    sa.Column('phone', sa.Integer(), nullable=False),
-    sa.Column('birthday', sa.DateTime(), nullable=False),
+    sa.Column('email', sa.String(length=50), nullable=False),
+    sa.Column('phone', sa.String(length=20), nullable=False),
+    sa.Column('birthday', sa.Date(), nullable=False),
     sa.Column('details', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_contacts_birthday'), 'contacts', ['birthday'], unique=False)
     op.create_index(op.f('ix_contacts_email'), 'contacts', ['email'], unique=False)
     op.create_index(op.f('ix_contacts_firstname'), 'contacts', ['firstname'], unique=False)
     op.create_index(op.f('ix_contacts_phone'), 'contacts', ['phone'], unique=False)
@@ -44,6 +43,5 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_contacts_phone'), table_name='contacts')
     op.drop_index(op.f('ix_contacts_firstname'), table_name='contacts')
     op.drop_index(op.f('ix_contacts_email'), table_name='contacts')
-    op.drop_index(op.f('ix_contacts_birthday'), table_name='contacts')
     op.drop_table('contacts')
     # ### end Alembic commands ###

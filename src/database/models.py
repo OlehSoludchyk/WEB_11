@@ -1,8 +1,10 @@
 from sqlalchemy import String, Date
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
+
 
 class Contact(Base):
     __tablename__ = 'contacts'
