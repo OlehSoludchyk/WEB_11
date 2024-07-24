@@ -61,18 +61,6 @@ async def delete_contact(contact_id: int, db: AsyncSession):
     return contact
 
 
-# async def get_upcoming_birthdays(db: AsyncSession):
-#     today = datetime.now().date()
-#     week_from_today = today + timedelta(days=7)
-#     statmnt = select(Contact).filter(
-#         and_(
-#             func.date(Contact.birthday) >= today,
-#             func.date(Contact.birthday) <= week_from_today
-#         )
-#     )
-#     contacts = await db.execute(statmnt)
-#     return contacts.scalars().all()
-
 
 async def get_upcoming_birthdays(db: AsyncSession):
     today = datetime.now().date()
