@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, cast, DATE, func, Date
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models import Contact
@@ -61,14 +61,27 @@ async def delete_contact(contact_id: int, db: AsyncSession):
     return contact
 
 
+# async def get_upcoming_birthdays(db: AsyncSession):
+#     today = datetime.now().date()
+#     week_from_today = today + timedelta(days=7)
+#     statmnt = select(Contact).filter(
+#         and_(
+#             func.date(Contact.birthday) >= today,
+#             func.date(Contact.birthday) <= week_from_today
+#         )
+#     )
+#     contacts = await db.execute(statmnt)
+#     return contacts.scalars().all()
+
+
 async def get_upcoming_birthdays(db: AsyncSession):
     today = datetime.now().date()
     week_from_today = today + timedelta(days=7)
     statmnt = select(Contact).filter(
         and_(
-            Contact.birthday >= today, 
-            Contact.birthday <= week_from_today
+            cast(Contact.birthday, Date) >= today,
+            cast(Contact.birthday, Date) <= week_from_today
         )
     )
-    results = await db.execute(statmnt)
-    return results.scalars().all()
+    contacts = await db.execute(statmnt)
+    return contacts.scalars().all()

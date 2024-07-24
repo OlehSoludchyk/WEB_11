@@ -7,18 +7,17 @@ from src.schemas.contact import ContactSchema, ContactUpdateSchema, ContactRespo
 
 router = APIRouter(prefix='/contacts', tags=['contacts'])
 
+@router.get('/upcoming_birthdays', response_model=list[ContactResponse])
+async def get_upcoming_birthdays(db: AsyncSession = Depends(get_db)):
+    contacts = await repositories_contacts.get_upcoming_birthdays(db)
+    return contacts
+
+
 
 @router.get('/', response_model=list[ContactResponse])
 async def get_contacts(limit: int = Query(default=1, ge=1, le=500), offset: int = Query(default=0, ge=0),
                        db: AsyncSession = Depends(get_db)):
     contacts = await repositories_contacts.get_contacts(limit, offset, db)
-    return contacts
-
-
-
-@router.get('/upcoming_birthdays', response_model=list[ContactResponse])
-async def get_upcoming_birthdays(db: AsyncSession = Depends(get_db)):
-    contacts = await repositories_contacts.get_upcoming_birthdays(db)
     return contacts
 
 
